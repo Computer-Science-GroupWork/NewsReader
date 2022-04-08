@@ -40,6 +40,7 @@ dependencies:
   http_services: ^2.1.1
   geocode: ^1.0.1
   latlng: ^0.1.0
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:
