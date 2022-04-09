@@ -37,9 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  Future<List> getNews() async {
+  Future<List> getNews(String search) async {
     String newsURL =
-        'https://api.newscatcherapi.com/v2/latest_headlines?countries=ug&lang=en';
+        'https://api.newscatcherapi.com/v2/${search}?countries=ug&lang=en';
     final response = await http.get(
       Uri.parse(newsURL),
 
@@ -49,8 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (response.statusCode == 200) {
       print('news issssssssssssssssssss ${response.body}');
+      setState(() {
+        news = jsonDecode(response.body)['articles'];
 
-       news = jsonDecode(response.body)['articles'];
+      });
+
 
       //print('newses issssssssssssssssssss ${body}');
       // news=NewsModel.fromJson(body) as List;
@@ -102,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // weather = body.main;
        print('weathers issssssssssssssssssss ${weather}');
-      await getNews();
+      await getNews('latest_headlines');
 
       return weather;
     } else {
@@ -214,11 +217,60 @@ class _MyHomePageState extends State<MyHomePage> {
               // if we got our data
             } else if (snapshot.hasData) {
               // Extracting data from snapshot object
-              return ListView.builder(
+              return Column(
+
+              children:[
+               // Expanded(child:
+                SizedBox(
+                  height: 80,
+                ),
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.all(30),
+
+                  decoration: const BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(Radius.circular(30))),
+                     child:TextField(
+                    // focusNode: focusNode,
+
+                    onChanged:(value) => getNews(value),
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ) ,
+                ),
+               // Expanded(child:
+                Container(
+                  child: Card(
+                    elevation: 2.0,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text((weather.temp).toString()),
+                          subtitle: Text((weather.feels_like).toString()),
+                          trailing:Text((weather.temp_min).toString()),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(child:
+                ListView.builder(
+                  shrinkWrap: true,
                 padding: const EdgeInsets.all(4.5),
                 itemCount: this.getLength(),
                 itemBuilder: _itemBuilder,
-              );
+              )),]);
             }
           }
 
@@ -232,22 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
-    return Column(
-      children:[
-    Container(
-      child: Card(
-        elevation: 2.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text((weather.temp).toString()),
-              subtitle: Text((weather.feels_like).toString()),
-               trailing:Text((weather.temp_min).toString()),
-            ),
-          ],
-        ),
-      ),
-    ),
+    return
       Card(
         elevation: 2.0,
         child: Column(
@@ -294,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             )
           ],
-        ))]);
+        ));
   }
 
   Future<Position> _determinePosition() async {
@@ -333,5 +370,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+  }
+
+  getSearch(String value) {
+
   }
 }
