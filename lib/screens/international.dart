@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:newsreader/screens/search.dart';
 import 'package:newsreader/screens/weather.dart';
 import 'package:newsreader/views/popular.dart';
 
@@ -87,7 +88,7 @@ class _InternationalState extends State<International> {
             .push(MaterialPageRoute(builder: (context) => WeatherPage()));
       } else {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Favorite()));
+            .push(MaterialPageRoute(builder: (context) => Search()));
       }
     });
   }
@@ -185,8 +186,8 @@ class _InternationalState extends State<International> {
                         label: 'Weather',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.favorite_outline),
-                        label: 'Favorites',
+                        icon: Icon(Icons.search),
+                        label: 'Search',
                       ),
                     ],
                     currentIndex: _selectedIndex, //New

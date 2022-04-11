@@ -9,6 +9,7 @@ import 'package:latlng/latlng.dart';
 import 'package:newsreader/models/weather.dart';
 import 'package:newsreader/screens/detail.dart';
 import 'package:newsreader/screens/international.dart';
+import 'package:newsreader/screens/search.dart';
 import 'package:newsreader/screens/weather.dart';
 import 'package:newsreader/views/music.dart';
 import 'package:newsreader/views/popular.dart';
@@ -36,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late LatLng _center;
   late  WeatherModel weather;
   late  List news;
-  // var isLoading = true.obs;
   late String weatherURL;
   @override
   void initState() {
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
             MaterialPageRoute(builder: (context) => WeatherPage()));
       }else  {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Favorite()));}
+            .push(MaterialPageRoute(builder: (context) => Search()));}
     });
   }
 
@@ -261,8 +261,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: 'Weather',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite_outline),
-                    label: 'Favorites',
+                    icon: Icon(Icons.search),
+                    label: 'search',
                   ),
                 ],
                 currentIndex: _selectedIndex, //New
