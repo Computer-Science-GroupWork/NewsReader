@@ -11,12 +11,12 @@ import 'package:newsreader/screens/detail.dart';
 import 'package:newsreader/screens/international.dart';
 import 'package:newsreader/screens/weather.dart';
 import 'package:newsreader/views/music.dart';
+import 'package:newsreader/views/popular.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
 import '../views/business.dart';
 import '../views/entertainment.dart';
-import '../views/international.dart';
 import '../views/politiics.dart';
 import '../views/sport.dart';
 import '../views/tech.dart';
@@ -202,12 +202,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorColor: Colors.white,
                 labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
                 tabs: [
+                  Tab(text: "Popular"),
+
                   Tab(text: "Tech"),
                   Tab(text: "Politics"),
                   Tab(text: "Sport"),
 
                   Tab(text: "Business"),
-                  Tab(text: "International"),
 
                   Tab(text: "Entertainment"),
                   Tab(text: "Music"),
@@ -282,11 +283,11 @@ class _MyHomePageState extends State<MyHomePage> {
               // Extracting data from snapshot object
               return TabBarView(
                 children: [
+                  PopularTabView(news),
                   TechTabView(news),
                   PoliticsTabView(news),
                   SportsTabView(news),
                   BusinessTabView(news),
-                  InternationalTabView(news),
                   EntertainmentTabView(news),
                   MusicTabView(news),
 

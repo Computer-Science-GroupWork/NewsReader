@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:newsreader/screens/weather.dart';
+import 'package:newsreader/views/popular.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
 import '../views/business.dart';
 import '../views/entertainment.dart';
-import '../views/international.dart';
 import '../views/music.dart';
 import '../views/politiics.dart';
 import '../views/sport.dart';
@@ -135,11 +135,12 @@ class _InternationalState extends State<International> {
                     indicatorColor: Colors.white,
                     labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
                     tabs: [
+                      Tab(text: "Popular"),
+
                       Tab(text: "Tech"),
                       Tab(text: "Politics"),
                       Tab(text: "Sport"),
                       Tab(text: "Business"),
-                      Tab(text: "International"),
                       Tab(text: "Entertainment"),
                       Tab(text: "Music"),
                     ],
@@ -212,11 +213,11 @@ class _InternationalState extends State<International> {
                   // Extracting data from snapshot object
                   return TabBarView(
                     children: [
+                      PopularTabView(news),
                       TechTabView(news),
                       PoliticsTabView(news),
                       SportsTabView(news),
                       BusinessTabView(news),
-                      InternationalTabView(news),
                       EntertainmentTabView(news),
                       MusicTabView(news),
                     ],

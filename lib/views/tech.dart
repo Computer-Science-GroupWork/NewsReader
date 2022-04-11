@@ -79,21 +79,10 @@ initState(){
   setState(() {
     found=tech;
      print('techhhjhhhhhhhhhhhh is ${tech}');
-    // tech = widget.news.where((element) => element['topic'] == 'tech').toList();
-    //     // .where((u) =>
-    //     // u["topic"].contains('tech'))
-    //     // .toList();
+
 
   });
 
-    //widget.news.where((u) =>{
-      // if(u["topic"].co 'tech')
-      //   setState(() {
-      //     tech.add(u);
-      //
-      //   });
-
-    //});
 
      }
 }
