@@ -43,6 +43,8 @@ dependencies:
   get: ^4.6.1
   circle_button: ^1.1.0
   google_fonts: ^2.3.1
+  social_share: ^2.2.1
+  share_plus: ^4.0.3
 
 dev_dependencies:
   flutter_test:

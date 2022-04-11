@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
@@ -81,8 +82,10 @@ class _DetailPageState extends State<DetailPage> {
                   // ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                    },
+                      String content='${widget.datas['title']} ${widget.datas['link']} ${widget.datas['excerpt']}';
+
+                        Share.share(content);
+                                         },
                     child: Icon(Icons.share, color: Colors.black),
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
