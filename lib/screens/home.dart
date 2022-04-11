@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
@@ -11,9 +10,16 @@ import 'package:newsreader/models/weather.dart';
 import 'package:newsreader/screens/detail.dart';
 import 'package:newsreader/screens/international.dart';
 import 'package:newsreader/screens/weather.dart';
+import 'package:newsreader/views/music.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
+import '../views/business.dart';
+import '../views/entertainment.dart';
+import '../views/international.dart';
+import '../views/politiics.dart';
+import '../views/sport.dart';
+import '../views/tech.dart';
 import 'favorite.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -49,10 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (response.statusCode == 200) {
       print('news issssssssssssssssssss ${response.body}');
-      setState(() {
+      // setState(() {
         news = jsonDecode(response.body)['articles'];
 
-      });
+      // });
 
 
       //print('newses issssssssssssssssssss ${body}');
@@ -91,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Send authorization headers to the backend.
       headers: {
         'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
-        'X-RapidAPI-Key': '16b0c5179emshdc6ed21ea337cc5p1a2bb5jsn90d94b3d6973'
+        'X-RapidAPI-Key': 'f1456fc294mshb683511e7e6e855p1d89f4jsn4191422febae'
       },
     );
     print('datas issssssssssssssssssss ${response.body}');
@@ -155,7 +161,64 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     return DefaultTabController(
+        length: 7,
+      child:Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120.0),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                "WELCOME",
+                textAlign: TextAlign.end,
+                style: kNonActiveTabStyle,
+              ),
+              subtitle: Text(
+                "Jessica Veranda",
+                textAlign: TextAlign.end,
+                style: kActiveTabStyle,
+              ),
+              // trailing: Container(
+              //   width: 50.0,
+              //   height: 50.0,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10.0),
+              //     image: DecorationImage(
+              //       image: AssetImage("assets/ve.jpg"),
+              //       fit: BoxFit.cover,
+              //     ),
+              //   ),
+              // ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: TabBar(
+                labelColor: Colors.black,
+                unselectedLabelColor: kGrey1,
+                unselectedLabelStyle: kNonActiveTabStyle,
+                indicatorSize: TabBarIndicatorSize.label,
+                isScrollable: true,
+                indicatorColor: Colors.white,
+                labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
+                tabs: [
+                  Tab(text: "Tech"),
+                  Tab(text: "Politics"),
+                  Tab(text: "Sport"),
+
+                  Tab(text: "Business"),
+                  Tab(text: "International"),
+
+                  Tab(text: "Entertainment"),
+                  Tab(text: "Music"),
+
+
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: Container(
           margin: EdgeInsets.all(15),
           decoration: BoxDecoration(
@@ -217,60 +280,72 @@ class _MyHomePageState extends State<MyHomePage> {
               // if we got our data
             } else if (snapshot.hasData) {
               // Extracting data from snapshot object
-              return Column(
+              return TabBarView(
+                children: [
+                  TechTabView(news),
+                  PoliticsTabView(news),
+                  SportsTabView(news),
+                  BusinessTabView(news),
+                  InternationalTabView(news),
+                  EntertainmentTabView(news),
+                  MusicTabView(news),
 
-              children:[
-               // Expanded(child:
-                SizedBox(
-                  height: 80,
-                ),
-                Container(
-                  height: 50,
-                  margin: EdgeInsets.all(30),
-
-                  decoration: const BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.all(Radius.circular(30))),
-                     child:TextField(
-                    // focusNode: focusNode,
-
-                    onChanged:(value) => getNews(value),
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ) ,
-                ),
-               // Expanded(child:
-                Container(
-                  child: Card(
-                    elevation: 2.0,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text((weather.temp).toString()),
-                          subtitle: Text((weather.feels_like).toString()),
-                          trailing:Text((weather.temp_min).toString()),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(child:
-                ListView.builder(
-                  shrinkWrap: true,
-                padding: const EdgeInsets.all(4.5),
-                itemCount: this.getLength(),
-                itemBuilder: _itemBuilder,
-              )),]);
+                ],
+              );
+              // return Column(
+              //
+              // children:[
+              //  // Expanded(child:
+              //   SizedBox(
+              //     height: 80,
+              //   ),
+              //   Container(
+              //     height: 50,
+              //     margin: EdgeInsets.all(30),
+              //
+              //     decoration: const BoxDecoration(
+              //         color: Colors.green,
+              //         borderRadius: BorderRadius.all(Radius.circular(30))),
+              //        child:TextField(
+              //       // focusNode: focusNode,
+              //
+              //       onChanged:(value) => getNews(value),
+              //       decoration: InputDecoration(
+              //         hintText: 'Search',
+              //         hintStyle: TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 18,
+              //           fontStyle: FontStyle.italic,
+              //         ),
+              //         border: InputBorder.none,
+              //       ),
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //       ),
+              //     ) ,
+              //   ),
+              //  // Expanded(child:
+              //   Container(
+              //     child: Card(
+              //       elevation: 2.0,
+              //       child: Column(
+              //         children: [
+              //           ListTile(
+              //             title: Text((weather.temp).toString()),
+              //             subtitle: Text((weather.feels_like).toString()),
+              //             trailing:Text((weather.temp_min).toString()),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              //   Expanded(child:
+              //   ListView.builder(
+              //     shrinkWrap: true,
+              //   padding: const EdgeInsets.all(4.5),
+              //   itemCount: this.getLength(),
+              //   itemBuilder: _itemBuilder,
+              // )),]);
             }
           }
 
@@ -280,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         future: getWeather(),
       ),
-    );
+    ));
   }
 
   Widget _itemBuilder(BuildContext context, int index) {

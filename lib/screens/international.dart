@@ -7,6 +7,13 @@ import 'package:newsreader/screens/weather.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
+import '../views/business.dart';
+import '../views/entertainment.dart';
+import '../views/international.dart';
+import '../views/music.dart';
+import '../views/politiics.dart';
+import '../views/sport.dart';
+import '../views/tech.dart';
 import 'detail.dart';
 import 'favorite.dart';
 import 'home.dart';
@@ -19,7 +26,7 @@ class International extends StatefulWidget {
 }
 
 class _InternationalState extends State<International> {
-  late  List news;
+  late List news;
 
   Future<List> getNews() async {
     String newsURL =
@@ -35,7 +42,6 @@ class _InternationalState extends State<International> {
       print('news issssssssssssssssssss ${response.body}');
 
       news = jsonDecode(response.body)['articles'];
-
 
       print('newses issssssssssssssssssss ${news}');
 
@@ -60,9 +66,11 @@ class _InternationalState extends State<International> {
   String getPublishAt(index) {
     return news[index]['published_date'];
   }
+
   int getLength() {
     return news.length;
   }
+
   int _selectedIndex = 1; //New
 
   void _onItemTapped(int index) {
@@ -74,144 +82,205 @@ class _InternationalState extends State<International> {
       } else if (index == 1) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => International()));
-      } else if(index == 2){
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => WeatherPage()));
-      }else  {
+      } else if (index == 2) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Favorite()));}
+            .push(MaterialPageRoute(builder: (context) => WeatherPage()));
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Favorite()));
+      }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      bottomNavigationBar: Container(
-          margin: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(50), topLeft: Radius.circular(50)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-            ],
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-              ),
-              child: BottomNavigationBar(
-                selectedFontSize: 20,
-                selectedIconTheme:
-                IconThemeData(color: fButtonColor, size: 40),
-                selectedItemColor: fButtonColor,
-                selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                backgroundColor: fBackgroundColor,
-                unselectedItemColor: Colors.black,
-
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Local',
+    return DefaultTabController(
+        length: 7,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(120.0),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(
+                    "WELCOME",
+                    textAlign: TextAlign.end,
+                    style: kNonActiveTabStyle,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.flight),
-                    label: 'International',
+                  subtitle: Text(
+                    "Jessica Veranda",
+                    textAlign: TextAlign.end,
+                    style: kActiveTabStyle,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.cloud),
-                    label: 'Weather',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite_outline),
-                    label: 'Favorites',
-                  ),
-                ],
-                currentIndex: _selectedIndex, //New
-                onTap: _onItemTapped,
-              ))),
-      body:  FutureBuilder(
-        builder: (ctx, snapshot) {
-          // Checking if future is resolved or not
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If we got an error
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occured',
-                  style: TextStyle(fontSize: 18),
+                  // trailing: Container(
+                  //   width: 50.0,
+                  //   height: 50.0,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10.0),
+                  //     image: DecorationImage(
+                  //       image: AssetImage("assets/ve.jpg"),
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
-              );
-
-              // if we got our data
-            } else if (snapshot.hasData) {
-              // Extracting data from snapshot object
-              return ListView.builder(
-                padding: const EdgeInsets.all(4.5),
-                itemCount: this.getLength(),
-                itemBuilder: _itemBuilder,
-              );
-            }
-          }
-
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        future: getNews(),
-      ),
-    );
-  }
-  Widget _itemBuilder(BuildContext context, int index) {
-    return Column(
-        children:[
-
-          Card(
-              elevation: 2.0,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(getTitle(index)),
-                    subtitle: Text(getDescription(index).toString()),
-                    // trailing: Icon(Icons.favorite_outline),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 30, left: 30),
-                    height: 100.0,
-                    child:
-                    Image.network((news[index]['media']) ?? 'https://s3.ap-southeast-1.amazonaws.com/images.asianage.com/images/aa-Cover-fp0p1pcb1uqec36nc6fpphf6o3-20220408013101.jpeg' ),
-
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(5.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(getAuthor(index)),
-                  ),
-                  ButtonBar(
-                    children: [
-                      TextButton(
-                        child: const Text('LEARN MORE'),
-                        onPressed: () {
-                          NewsModel newsModel= new NewsModel();
-                          newsModel.author=news[index]['author'];
-                          newsModel.title=news[index]['title'];
-                          newsModel.description=news[index]['excerpt'];
-                          newsModel.urlToImage=news[index]['media'];
-                          newsModel.summary=news[index]['summary'];
-                          newsModel.topic=news[index]['topic'];
-                          newsModel.publishedAt=news[index]['published_date'];
-                          newsModel.url=news[index]['link'];
-                          // newsModel.title=news[index]['title'];
-                          // newsModel.title=news[index]['title'];
-
-                          // Map<String, dynamic> as = newsModel.toMap();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => DetailPage(datas: newsModel)));
-                        },
-                      )
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: TabBar(
+                    labelColor: Colors.black,
+                    unselectedLabelColor: kGrey1,
+                    unselectedLabelStyle: kNonActiveTabStyle,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    isScrollable: true,
+                    indicatorColor: Colors.white,
+                    labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
+                    tabs: [
+                      Tab(text: "Tech"),
+                      Tab(text: "Politics"),
+                      Tab(text: "Sport"),
+                      Tab(text: "Business"),
+                      Tab(text: "International"),
+                      Tab(text: "Entertainment"),
+                      Tab(text: "Music"),
                     ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: Container(
+              margin: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(50),
+                    topLeft: Radius.circular(50)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+                ],
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  child: BottomNavigationBar(
+                    selectedFontSize: 20,
+                    selectedIconTheme:
+                        IconThemeData(color: fButtonColor, size: 40),
+                    selectedItemColor: fButtonColor,
+                    selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    backgroundColor: fBackgroundColor,
+                    unselectedItemColor: Colors.black,
+
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Local',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.flight),
+                        label: 'International',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.cloud),
+                        label: 'Weather',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.favorite_outline),
+                        label: 'Favorites',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex, //New
+                    onTap: _onItemTapped,
+                  ))),
+          body: FutureBuilder(
+            builder: (ctx, snapshot) {
+              // Checking if future is resolved or not
+              if (snapshot.connectionState == ConnectionState.done) {
+                // If we got an error
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${snapshot.error} occured',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+
+                  // if we got our data
+                } else if (snapshot.hasData) {
+                  // Extracting data from snapshot object
+                  return TabBarView(
+                    children: [
+                      TechTabView(news),
+                      PoliticsTabView(news),
+                      SportsTabView(news),
+                      BusinessTabView(news),
+                      InternationalTabView(news),
+                      EntertainmentTabView(news),
+                      MusicTabView(news),
+                    ],
+                  );
+                }
+              }
+
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            future: getNews(),
+          ),
+        ));
+  }
+
+  Widget _itemBuilder(BuildContext context, int index) {
+    return Column(children: [
+      Card(
+          elevation: 2.0,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(getTitle(index)),
+                subtitle: Text(getDescription(index).toString()),
+                // trailing: Icon(Icons.favorite_outline),
+              ),
+              Container(
+                padding: EdgeInsets.only(right: 30, left: 30),
+                height: 100.0,
+                child: Image.network((news[index]['media']) ??
+                    'https://s3.ap-southeast-1.amazonaws.com/images.asianage.com/images/aa-Cover-fp0p1pcb1uqec36nc6fpphf6o3-20220408013101.jpeg'),
+              ),
+              Container(
+                padding: EdgeInsets.all(5.0),
+                alignment: Alignment.centerLeft,
+                child: Text(getAuthor(index)),
+              ),
+              ButtonBar(
+                children: [
+                  TextButton(
+                    child: const Text('LEARN MORE'),
+                    onPressed: () {
+                      NewsModel newsModel = new NewsModel();
+                      newsModel.author = news[index]['author'];
+                      newsModel.title = news[index]['title'];
+                      newsModel.description = news[index]['excerpt'];
+                      newsModel.urlToImage = news[index]['media'];
+                      newsModel.summary = news[index]['summary'];
+                      newsModel.topic = news[index]['topic'];
+                      newsModel.publishedAt = news[index]['published_date'];
+                      newsModel.url = news[index]['link'];
+                      // newsModel.title=news[index]['title'];
+                      // newsModel.title=news[index]['title'];
+
+                      // Map<String, dynamic> as = newsModel.toMap();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DetailPage(datas: newsModel)));
+                    },
                   )
                 ],
-              ))]);
+              )
+            ],
+          ))
+    ]);
   }
 }
