@@ -221,7 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-          margin: EdgeInsets.all(15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(50), topLeft: Radius.circular(50)),
@@ -236,14 +235,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 topRight: Radius.circular(10.0),
               ),
               child: BottomNavigationBar(
-                selectedFontSize: 20,
-                selectedIconTheme:
-                IconThemeData(color: fButtonColor, size: 40),
-                selectedItemColor: fButtonColor,
-                selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                backgroundColor: fBackgroundColor,
-                unselectedItemColor: Colors.black,
-
+                // selectedFontSize: 20,
+                // selectedIconTheme:
+                // IconThemeData(color: fButtonColor, size: 40),
+                // selectedItemColor: fButtonColor,
+                // selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                // backgroundColor: fBackgroundColor,
+                // unselectedItemColor: Colors.black,
+                backgroundColor: Colors.white,
+                // currentIndex: _selectedIndex,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                type: BottomNavigationBarType.fixed,
                 items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),

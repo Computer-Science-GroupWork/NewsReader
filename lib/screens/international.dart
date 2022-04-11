@@ -150,7 +150,6 @@ class _InternationalState extends State<International> {
             ),
           ),
           bottomNavigationBar: Container(
-              margin: EdgeInsets.all(15),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(50),
@@ -166,13 +165,11 @@ class _InternationalState extends State<International> {
                     topRight: Radius.circular(10.0),
                   ),
                   child: BottomNavigationBar(
-                    selectedFontSize: 20,
-                    selectedIconTheme:
-                        IconThemeData(color: fButtonColor, size: 40),
-                    selectedItemColor: fButtonColor,
-                    selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    backgroundColor: fBackgroundColor,
-                    unselectedItemColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    // currentIndex: _selectedIndex,
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    type: BottomNavigationBarType.fixed,
 
                     items: const <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
