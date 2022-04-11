@@ -1,43 +1,47 @@
 class NewsModel {
   String? author;
   String? title;
-  String? description;
-  String? url;
-  String? urlToImage;
-  String? publishedAt;
+  String? excerpt;
+  String? link;
+  String? media;
+  String? published_date;
   String? content;
   String? topic;
   String? summary;
+  String? likerid;
 
   NewsModel(
-      {this.author, this.title, this.description, this.url, this.urlToImage, this.publishedAt, this.content,
-      this.topic,this.summary});
+      {this.author, this.title, this.excerpt, this.link, this.media, this.published_date, this.content,
+      this.topic,this.summary,this.likerid});
 
   // receiving data from server
   factory NewsModel.fromMap(map) {
     return NewsModel(
       author: map['author'],
       title: map['title'],
-      description: map['description'],
-      url: map['url'],
-      urlToImage: map['urlToImage'],
-      publishedAt: map['publishedAt'],
+      excerpt: map['excerpt'],
+      link: map['link'],
+      media: map['media'],
+      published_date: map['published_date'],
       content:map['content'],
       topic:map['topic'],
-      summary:map['summary']
+      summary:map['summary'],
+      likerid: map['likerid']
+
     );
   }
 
   factory NewsModel.fromJson(Map<String, dynamic> json) => NewsModel(
         author: json['author'],
         title: json['title'],
-        description: json['description'],
-        url: json['url'],
-        urlToImage: json['urlToImage'],
-        publishedAt: json['publishedAt'],
+        excerpt: json['description'],
+        link: json['link'],
+        media: json['media'],
+        published_date: json['published_date'],
         content: json['content'],
         topic:json['topic'],
-        summary:json['summary']
+        summary:json['summary'],
+        likerid: json['likerid']
       );
 
 
@@ -46,25 +50,27 @@ class NewsModel {
     return {
       'author': author,
       'title': title,
-      'description': description,
-      'url': url,
-      'urlToImage': urlToImage,
-      'publishedAt': publishedAt,
+      'excerpt': excerpt,
+      'link': link,
+      'media': media,
+      'published_date': published_date,
       'content': content,
       'topic':topic,
-      'summary':summary
+      'summary':summary,
+      'likerid':likerid
     };
   }
 
   Map<String, dynamic> toJson() => {
         "author": author,
         'title': title,
-      'description': description,
-      'url': url,
-      'urlToImage': urlToImage,
-      'publishedAt': publishedAt,
+      'description': excerpt,
+      'link': link,
+      'media': media,
+      'published_date': published_date,
       'content': content,
     'topic': topic,
-    'summary':summary
+    'summary':summary,
+    'likerid':likerid
       };
 }

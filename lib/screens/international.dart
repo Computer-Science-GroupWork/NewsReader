@@ -85,7 +85,7 @@ class _InternationalState extends State<International> {
             .push(MaterialPageRoute(builder: (context) => International()));
       } else if (index == 2) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => WeatherPage()));
+            .push(MaterialPageRoute(builder: (context) => Favorite()));
       } else {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => Search()));
@@ -182,8 +182,8 @@ class _InternationalState extends State<International> {
                         label: 'International',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.cloud),
-                        label: 'Weather',
+                        icon: Icon(Icons.favorite_outline),
+                        label: 'Favorite',
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.search),
@@ -262,12 +262,12 @@ class _InternationalState extends State<International> {
                       NewsModel newsModel = new NewsModel();
                       newsModel.author = news[index]['author'];
                       newsModel.title = news[index]['title'];
-                      newsModel.description = news[index]['excerpt'];
-                      newsModel.urlToImage = news[index]['media'];
+                      newsModel.excerpt = news[index]['excerpt'];
+                      newsModel.media = news[index]['media'];
                       newsModel.summary = news[index]['summary'];
                       newsModel.topic = news[index]['topic'];
-                      newsModel.publishedAt = news[index]['published_date'];
-                      newsModel.url = news[index]['link'];
+                      newsModel.published_date = news[index]['published_date'];
+                      newsModel.link = news[index]['link'];
                       // newsModel.title=news[index]['title'];
                       // newsModel.title=news[index]['title'];
 

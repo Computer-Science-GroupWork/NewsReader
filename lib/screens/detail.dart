@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 import '../models/news.dart';
@@ -15,12 +20,26 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-   getTitle() {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  late bool status=false;
+  late  Box box1;
+  late String userId;
+  @override
+  initState(){
+    getId();
+  }
+  getId()async{
+    box1 = await Hive.openBox('newsapp');
+
+     // box1.clear();
+  }
+  getTitle() {
     return widget.datas?['title'];
   }
 
    getAuthor() {
-    return widget.datas['author'];
+    return widget.datas['clean_url'];
   }
 
   getDescription() {
@@ -28,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
    getPublishAt() {
-    return widget.datas?['publishedAt'];
+    return widget.datas?['published_date'];
   }
   //
   // String? getDetail() {
@@ -100,7 +119,14 @@ class _DetailPageState extends State<DetailPage> {
                   // ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      status ? addFavorite(widget.datas):signInAnonymously();
+                    // if(userId? != null){
+                    //
+                    // }else{
+                    //   getId();
+                    // }
+
+
                     },
                     child: Icon(Icons.favorite_border, color: Colors.black),
                     style: ElevatedButton.styleFrom(
@@ -188,10 +214,11 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
                 SizedBox(width: 5.0),
+                Flexible(child:
                 Text(
                   getAuthor().toString(),
                   style: kDetailContent.copyWith(color: Colors.black),
-                ),
+                ),)
               ],
             ),
             SizedBox(height: 15.0),
@@ -205,56 +232,43 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-  //   return Container(
-  //     child: Card(
-  //       child:SingleChildScrollView(
-  //
-  //       child:Column(
-  //         children: [
-  //           Container(
-  //             child: Image.network((widget.datas?.urlToImage).toString()),
-  //           ),
-  //           SizedBox(
-  //             height: 20,
-  //           ),
-  //           Container(
-  //             child: Text(getTitle().toString()),
-  //           ),
-  //           SizedBox(
-  //             height: 20,
-  //
-  //           ),
-  //
-  //           Container(
-  //             child: Text(getSummary().toString()),
-  //           ),
-  //           SizedBox(
-  //             height: 20,
-  //
-  //           ),
-  //
-  //           Container(
-  //                   child: Text(getAuthor().toString()),
-  //
-  //                 ),
-  //           SizedBox(
-  //             height: 20,
-  //           ),
-  //
-  //           Container(
-  //                   child: Text(getPublishAt().toString()),
-  //
-  //                 ),
-  //           Container(
-  //             child: Text(getUrl().toString()),
-  //
-  //           ),
-  //
-  //
-  //         ],
-  //       ),)
-  //
-  //     ),
-  //   );
-  // }
+
+   signInAnonymously() async{
+    _auth.signInAnonymously().then((result) {
+      setState(() {
+        box1.put('userId', result.user);
+
+        // final User user = result.user;
+      });
+    });
+    userId = box1.get('userId');
+    status=true;
+    print('ussssssssssssssssr ${userId}');
+    addFavorite(widget.datas);
+  }
+
+  void addFavorite(datas) async{
+    var uid = Uuid().v1();
+
+    NewsModel newsModel = new NewsModel();
+    newsModel.likerid=userId;
+    newsModel.title=widget.datas['title'];
+    newsModel.author=widget.datas['clean_url'];
+    newsModel.excerpt=widget.datas['excerpt'];
+    newsModel.link=widget.datas['link'];
+    newsModel.media=widget.datas['media'];
+    newsModel.summary=widget.datas['summary'];
+    newsModel.published_date= widget.datas['published_date'];
+    newsModel.topic=widget.datas['topic'];
+    await firebaseFirestore
+        .collection("likes")
+        .doc(uid)
+        .set(newsModel.toMap());
+    // setState(() {
+    //   showSpinner = false;
+    // });
+    Fluttertoast.showToast(msg: "Favorite added successfully :) ");
+  }
+
 }
+

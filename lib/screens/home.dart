@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .push(MaterialPageRoute(builder: (context) => International()));
       } else if(index == 2){
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => WeatherPage()));
+            MaterialPageRoute(builder: (context) => Favorite()));
       }else  {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => Search()));}
@@ -257,8 +257,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: 'International',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.cloud),
-                    label: 'Weather',
+                    icon: Icon(Icons.favorite_outline),
+                    label: 'Favorites',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.search),
@@ -296,60 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 ],
               );
-              // return Column(
-              //
-              // children:[
-              //  // Expanded(child:
-              //   SizedBox(
-              //     height: 80,
-              //   ),
-              //   Container(
-              //     height: 50,
-              //     margin: EdgeInsets.all(30),
-              //
-              //     decoration: const BoxDecoration(
-              //         color: Colors.green,
-              //         borderRadius: BorderRadius.all(Radius.circular(30))),
-              //        child:TextField(
-              //       // focusNode: focusNode,
-              //
-              //       onChanged:(value) => getNews(value),
-              //       decoration: InputDecoration(
-              //         hintText: 'Search',
-              //         hintStyle: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 18,
-              //           fontStyle: FontStyle.italic,
-              //         ),
-              //         border: InputBorder.none,
-              //       ),
-              //       style: TextStyle(
-              //         color: Colors.black,
-              //       ),
-              //     ) ,
-              //   ),
-              //  // Expanded(child:
-              //   Container(
-              //     child: Card(
-              //       elevation: 2.0,
-              //       child: Column(
-              //         children: [
-              //           ListTile(
-              //             title: Text((weather.temp).toString()),
-              //             subtitle: Text((weather.feels_like).toString()),
-              //             trailing:Text((weather.temp_min).toString()),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              //   Expanded(child:
-              //   ListView.builder(
-              //     shrinkWrap: true,
-              //   padding: const EdgeInsets.all(4.5),
-              //   itemCount: this.getLength(),
-              //   itemBuilder: _itemBuilder,
-              // )),]);
+
             }
           }
 
@@ -393,12 +340,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     NewsModel newsModel= new NewsModel();
                     newsModel.author=news[index]['author'];
                     newsModel.title=news[index]['title'];
-                    newsModel.description=news[index]['excerpt'];
-                    newsModel.urlToImage=news[index]['media'];
+                    newsModel.excerpt=news[index]['excerpt'];
+                    newsModel.media=news[index]['media'];
                     newsModel.summary=news[index]['summary'];
                     newsModel.topic=news[index]['topic'];
-                    newsModel.publishedAt=news[index]['published_date'];
-                    newsModel.url=news[index]['link'];
+                    newsModel.published_date=news[index]['published_date'];
+                    newsModel.link=news[index]['link'];
                     // newsModel.title=news[index]['title'];
                     // newsModel.title=news[index]['title'];
 

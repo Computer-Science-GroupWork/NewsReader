@@ -12,7 +12,7 @@ class SecondaryCard extends StatelessWidget {
   }
 
   String? getAuthor() {
-    return datas['author'];
+    return datas['clean_url'];
   }
 
   String? getDescription() {
@@ -20,7 +20,7 @@ class SecondaryCard extends StatelessWidget {
   }
 
   String? getPublishAt() {
-    return datas['publishedAt'];
+    return datas['published_date'];
   }
 
   // String? getDetail() {
