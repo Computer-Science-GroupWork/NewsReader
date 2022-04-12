@@ -43,39 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     weatherT = [];
-    weatherT = [{"main" : "Fetching..."}];
+    weatherT = [{"main" : "Fetching...", "icon": "01n"}];
     setState(() {});
   }
 
-  Future<List> getNews(String search) async {
-    String newsURL =
-        'https://api.newscatcherapi.com/v2/${search}?countries=ug&lang=en';
-    final response = await http.get(
-      Uri.parse(newsURL),
-
-      // Send authorization headers to the backend.
-      headers: {'x-api-key': '9OcCDjXqxKPoNc0JRy3BSfEi79fvPiARLuVbSesDYf0'},
-    );
-
-    if (response.statusCode == 200) {
-      print('news issssssssssssssssssss ${response.body}');
-      // setState(() {
-        news = jsonDecode(response.body)['articles'];
-
-      // });
-
-
-      //print('newses issssssssssssssssssss ${body}');
-      // news=NewsModel.fromJson(body) as List;
-      // news = body.map((article) => NewsModel.fromJson(article)).toList() ;
-      // weather = body.main;
-      print('newses issssssssssssssssssss ${news}');
-
-      return news;
-    } else {
-      throw "Unable to retrieve news";
-    }
-  }
 
   /* Future<WeatherModel> getWeather() async {
     currentPosition = await _determinePosition();
@@ -150,7 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (response.statusCode == 200) {
       weatherT = jsonDecode(response.body)['weather'];
       print("WeatherText Data is ${weatherT}");
-      await getNews('latest_headlines');
       return weatherT;
     } else {
       print("Response is ${response.statusCode}");
@@ -158,6 +128,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<List> getNews(String search) async {
+    await getWeatherText();
+    String newsURL =
+        'https://api.newscatcherapi.com/v2/${search}?countries=ug&lang=en';
+    final response = await http.get(
+      Uri.parse(newsURL),
+      // Send authorization headers to the backend.
+      headers: {'x-api-key': '9OcCDjXqxKPoNc0JRy3BSfEi79fvPiARLuVbSesDYf0'},
+    );
+
+    if (response.statusCode == 200) {
+        news = jsonDecode(response.body)['articles'];
+      return news;
+    } else {
+      throw "Unable to retrieve news";
+    }
+  }
 
   String getTitle(index) {
     return news[index]['title'];
@@ -182,6 +169,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String getWeatherDesc()
   {
     return weatherT[0]['main']; 
+  }
+
+  String getWeatherIcon()
+  {
+    return weatherT[0]['icon']; 
   }
 
   void _onItemTapped(int index) {
@@ -213,27 +205,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.favorite,
-                  color: Colors.pink,
-                  size: 30.0,
-                ),
-                SizedBox(
-                  width: 120.0,
-                  height: 60.0,
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
                   child: ListTile(
                     title: Text(
                       "FORECAST",
-                      textAlign: TextAlign.end,
+                      textAlign: TextAlign.start,
                       style: kNonActiveTabStyle,
                     ),
                       subtitle: Text(
                       getWeatherDesc(),
-                      textAlign: TextAlign.end,
+                      textAlign: TextAlign.start,
                       style: kActiveTabStyle,
                     ),
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
                   ),
                 ),
               ]
@@ -351,7 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CircularProgressIndicator(),
           );
         },
-        future: getWeatherText(),
+        future: getNews('latest_headlines'),
       ),
     ),
         ),
