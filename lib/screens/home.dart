@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlng/latlng.dart';
 import 'package:newsreader/models/weather.dart';
+import 'package:newsreader/models/weatherText.dart';
 import 'package:newsreader/screens/detail.dart';
 import 'package:newsreader/screens/international.dart';
 import 'package:newsreader/screens/search.dart';
@@ -36,10 +37,13 @@ class _MyHomePageState extends State<MyHomePage> {
   late String? location;
   late LatLng _center;
   late  WeatherModel weather;
+  late List weatherT;
   late  List news;
   late String weatherURL;
   @override
   void initState() {
+    weatherT = [];
+    weatherT = [{"main" : "Fetching..."}];
     setState(() {});
   }
 
@@ -73,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<WeatherModel> getWeather() async {
+  /* Future<WeatherModel> getWeather() async {
     currentPosition = await _determinePosition();
 
     GeoCode geoCode = GeoCode();
@@ -97,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Send authorization headers to the backend.
       headers: {
         'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
-        'X-RapidAPI-Key': 'f1456fc294mshb683511e7e6e855p1d89f4jsn4191422febae'
+        'X-RapidAPI-Key': '73e6c4f710mshf9f5b3ee2ed3f80p1f9b55jsn11b8080f8df8'
       },
     );
     print('datas issssssssssssssssssss ${response.body}');
@@ -117,6 +121,40 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       throw "Unable to retrieve weather";
 
+    }
+  } */
+
+
+  Future<List> getWeatherText() async {
+    currentPosition = await _determinePosition();
+    GeoCode geoCode = GeoCode();
+    try {
+      addresses = await geoCode.reverseGeocoding(
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude);
+
+      var first = addresses.city;
+      print("${addresses.city} : ${addresses.countryName}");
+      location = addresses.city;
+    } catch (e) {
+      print(e);
+    }
+    weatherURL = 'https://community-open-weather-map.p.rapidapi.com/weather?q=${addresses.city}';
+    final response = await http.get(
+      Uri.parse(weatherURL),
+      headers: {
+        'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
+        'X-RapidAPI-Key': '73e6c4f710mshf9f5b3ee2ed3f80p1f9b55jsn11b8080f8df8'
+      },
+    );
+    if (response.statusCode == 200) {
+      weatherT = jsonDecode(response.body)['weather'];
+      print("WeatherText Data is ${weatherT}");
+      await getNews('latest_headlines');
+      return weatherT;
+    } else {
+      print("Response is ${response.statusCode}");
+      throw "Unable to retrieve weather";
     }
   }
 
@@ -141,6 +179,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   int _selectedIndex = 0; //New
 
+  String getWeatherDesc()
+  {
+    return weatherT[0]['main']; 
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -163,33 +206,37 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
      return DefaultTabController(
         length: 7,
-      child:Scaffold(
+        child: SafeArea(
+          child: Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120.0),
         child: Column(
           children: [
-            ListTile(
-              title: Text(
-                "WELCOME",
-                textAlign: TextAlign.end,
-                style: kNonActiveTabStyle,
-              ),
-              subtitle: Text(
-                "Jessica Veranda",
-                textAlign: TextAlign.end,
-                style: kActiveTabStyle,
-              ),
-              // trailing: Container(
-              //   width: 50.0,
-              //   height: 50.0,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(10.0),
-              //     image: DecorationImage(
-              //       image: AssetImage("assets/ve.jpg"),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Icon(
+                  Icons.favorite,
+                  color: Colors.pink,
+                  size: 30.0,
+                ),
+                SizedBox(
+                  width: 120.0,
+                  height: 60.0,
+                  child: ListTile(
+                    title: Text(
+                      "FORECAST",
+                      textAlign: TextAlign.end,
+                      style: kNonActiveTabStyle,
+                    ),
+                      subtitle: Text(
+                      getWeatherDesc(),
+                      textAlign: TextAlign.end,
+                      style: kActiveTabStyle,
+                    ),
+                  ),
+                ),
+              ]
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -304,9 +351,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CircularProgressIndicator(),
           );
         },
-        future: getWeather(),
+        future: getWeatherText(),
       ),
-    ));
+    ),
+        ),
+    );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
