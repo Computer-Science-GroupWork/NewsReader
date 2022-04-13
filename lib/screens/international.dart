@@ -97,34 +97,35 @@ class _InternationalState extends State<International> {
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 7,
+        child:SafeArea(
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(120.0),
             child: Column(
               children: [
-                ListTile(
-                  title: Text(
-                    "WELCOME",
-                    textAlign: TextAlign.end,
-                    style: kNonActiveTabStyle,
-                  ),
-                  subtitle: Text(
-                    "Jessica Veranda",
-                    textAlign: TextAlign.end,
-                    style: kActiveTabStyle,
-                  ),
-                  // trailing: Container(
-                  //   width: 50.0,
-                  //   height: 50.0,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(10.0),
-                  //     image: DecorationImage(
-                  //       image: AssetImage("assets/ve.jpg"),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ),
-                ),
+                // ListTile(
+                //   title: Text(
+                //     "WELCOME",
+                //     textAlign: TextAlign.end,
+                //     style: kNonActiveTabStyle,
+                //   ),
+                //   subtitle: Text(
+                //     "Jessica Veranda",
+                //     textAlign: TextAlign.end,
+                //     style: kActiveTabStyle,
+                //   ),
+                //   // trailing: Container(
+                //   //   width: 50.0,
+                //   //   height: 50.0,
+                //   //   decoration: BoxDecoration(
+                //   //     borderRadius: BorderRadius.circular(10.0),
+                //   //     image: DecorationImage(
+                //   //       image: AssetImage("assets/ve.jpg"),
+                //   //       fit: BoxFit.cover,
+                //   //     ),
+                //   //   ),
+                //   // ),
+                // ),
                 Align(
                   alignment: Alignment.topLeft,
                   child: TabBar(
@@ -229,7 +230,7 @@ class _InternationalState extends State<International> {
             },
             future: getNews(),
           ),
-        ));
+        )));
   }
 
   Widget _itemBuilder(BuildContext context, int index) {

@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
      return DefaultTabController(
         length: 7,
-        child: SafeArea(
+         child: SafeArea(
           child: Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120.0),
@@ -437,8 +437,8 @@ class _MyHomePageState extends State<MyHomePage> {
         future: getNews('latest_headlines'),
       ),
     ),
-        ),
-    );
+         ));
+
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
