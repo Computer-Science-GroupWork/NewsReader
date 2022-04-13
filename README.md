@@ -5,30 +5,21 @@ It displays the forecast for the day and also displays news articles which can b
 
 ## Screenshots
 
-It shows weather in the app bar and news with the home page having popular news and other categories.
+![Screens](https://github.com/Computer-Science-GroupWork/NewsReader/blob/9e5a862936433d0e8a1bb47292f3df7d02c3f62f/Shots.png?raw=true)
 
-![Home Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/bb47cce7e7cdeacdf38507775a13ced5cab7df1f/image4.png?raw=true)
+## Features of the app
+ 
+ 1 It shows weather in the app bar and news with the home page having popular news and other categories.
 
-A section for international news.
+ 2 A section for international news.
 
-![International news](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image3.jpg?raw=true)
+ 3 People can save the articles they like to favourites section.
 
-Read article screen with a voice reader.
+ 4 Also search for articles.
 
-![Read news](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/detail.jpg?)
-
-People can save the articles they like to favourites section.
-
-![Favourites Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image2.jpg?raw=true)
-
-Also search for articles.
-
-![Search Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image1.jpg?raw=true)
-
-Share articles with others.
-
-![Share Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/whatsapp.jpg)
-
+ 5 Share articles with others.
+ 
+ 6 Read article detail screen with a voice reader.
 
 ## About Project
 
