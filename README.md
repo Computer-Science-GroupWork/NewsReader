@@ -27,7 +27,7 @@ Also search for articles.
 
 Share articles with others.
 
-![Share Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/whatsapp.jpg | width=100)
+![Share Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/whatsapp.jpg)
 
 
 ## About Project
