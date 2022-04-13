@@ -1,29 +1,29 @@
-# newsreader
+# NewsREAD!
 
 A news and weather app built using Flutter.
 It displays the forecast for the day and also displays news articles which can be read by the app to the user(app reads the text out loud for the user).
 
 ## Screenshots
 
-It shows weather in the app bar and news with the home page having popular news and other categories.
+![Screens](https://github.com/Computer-Science-GroupWork/NewsReader/blob/a4eb76136107f0567be81ce9cb0b499e50ca9810/Shots.png?raw=true)
 
-![Home Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image4.png?raw=true)
+## Features of the app
+ 
+ 1 It shows weather in the app bar and news with the home page having popular news and other categories.
 
-A section for international news.
+ 2 A section for international news.
 
-![International news](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image3.jpg?raw=true)
+ 3 People can save the articles they like to favourites section.
 
-People can save the articles they like to favourites section.
+ 4 Also search for articles.
 
-![Favourites Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image2.jpg?raw=true)
-
-Also search for articles.
-
-![Search Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image1.jpg?raw=true)
+ 5 Share articles with others.
+ 
+ 6 Read article detail screen with a voice reader.
 
 ## About Project
 
 Group 18 Principles of Programming Year 3 2022 Coursework:
 
-- [Download and install the app](https://drive.google.com/file/d/18fkNyrY5b-QC51yWvlLSQ7VATI4H3kN6/view?usp=sharing)
+- [Download and install the app](https://drive.google.com/file/d/1amFlNNBS385fDTaSQMIcpH-kfVBVQ2nQ/view?usp=sharing)
 
