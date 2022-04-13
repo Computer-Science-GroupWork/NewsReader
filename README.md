@@ -7,7 +7,7 @@ It displays the forecast for the day and also displays news articles which can b
 
 It shows weather in the app bar and news with the home page having popular news and other categories.
 
-![Home Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image4.png?raw=true)
+![Home Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/bb47cce7e7cdeacdf38507775a13ced5cab7df1f/image4.png?raw=true)
 
 A section for international news.
 
