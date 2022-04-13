@@ -48,52 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-  /* Future<WeatherModel> getWeather() async {
-    currentPosition = await _determinePosition();
 
-    GeoCode geoCode = GeoCode();
-    try {
-      addresses = await geoCode.reverseGeocoding(
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude);
-
-      var first = addresses.city;
-      print("${addresses.city} : ${addresses.countryName}");
-      location = addresses.city;
-    } catch (e) {
-      print(e);
-    }
-    weatherURL =
-        'https://community-open-weather-map.p.rapidapi.com/weather?q=${addresses.city}';
-
-    final response = await http.get(
-      Uri.parse(weatherURL),
-
-      // Send authorization headers to the backend.
-      headers: {
-        'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
-        'X-RapidAPI-Key': '73e6c4f710mshf9f5b3ee2ed3f80p1f9b55jsn11b8080f8df8'
-      },
-    );
-    print('datas issssssssssssssssssss ${response.body}');
-
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body)['main'];
-      ;
-      print('wethar issssssssssssssssssss ${body}');
-
-      weather = WeatherModel.fromJson(body);
-
-      // weather = body.main;
-       print('weathers issssssssssssssssssss ${weather}');
-      await getNews('latest_headlines');
-
-      return weather;
-    } else {
-      throw "Unable to retrieve weather";
-
-    }
-  } */
 
 
   Future<List> getWeatherText() async {
@@ -130,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List> getNews(String search) async {
-    await getWeatherText();
     String newsURL =
         'https://api.newscatcherapi.com/v2/${search}?countries=ug&lang=en';
     final response = await http.get(
@@ -143,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
         news = jsonDecode(response.body)['articles'];
       return news;
     } else {
+      getNews('latest_headlines');
       throw "Unable to retrieve news";
     }
   }
@@ -295,32 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     future: getWeatherText(),
                   ),
                 ),
-                // Flexible(
-                //   fit: FlexFit.loose,
-                //   flex: 1,
-                //   child: ListTile(
-                //     title: Text(
-                //       "FORECAST",
-                //       textAlign: TextAlign.start,
-                //       style: kNonActiveTabStyle,
-                //     ),
-                //       subtitle: Text(
-                //       getWeatherDesc(),
-                //       textAlign: TextAlign.start,
-                //       style: kActiveTabStyle,
-                //     ),
-                //   ),
-                // ),
-            //     Flexible(
-            //       fit: FlexFit.loose,
-            //       flex: 1,
-            //       child: Align(
-            //         alignment: Alignment.centerRight,
-            //         child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
-            //       ),
-            //     ),
-            //   ]
-            // ),
+
             Align(
               alignment: Alignment.topLeft,
               child: TabBar(
@@ -530,7 +460,5 @@ class _MyHomePageState extends State<MyHomePage> {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  getSearch(String value) {
 
-  }
 }
