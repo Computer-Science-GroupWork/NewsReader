@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Uri.parse(weatherURL),
       headers: {
         'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
-        'X-RapidAPI-Key': '73e6c4f710mshf9f5b3ee2ed3f80p1f9b55jsn11b8080f8df8'
+        'X-RapidAPI-Key': 'd4d1a7cf5emsh08b8ff7b3dbd2a7p153e3djsn58dfd23c2d26'
       },
     );
     if (response.statusCode == 200) {
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await http.get(
       Uri.parse(newsURL),
       // Send authorization headers to the backend.
-      headers: {'x-api-key': 'Rm90XozxCYCQvojFak5SUBFGn6_4AWz3SgH2duuSyvQ'},
+      headers: {'x-api-key': 'MytqC95wanDyoUUyE9uRT-aIBqM3JGOExCrUoXZoxU0'},
     );
 
     if (response.statusCode == 200) {
