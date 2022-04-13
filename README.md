@@ -13,6 +13,10 @@ A section for international news.
 
 ![International news](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image3.jpg?raw=true)
 
+Read article screen with a voice reader.
+
+![Read news](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/detail.jpg?raw=true)
+
 People can save the articles they like to favourites section.
 
 ![Favourites Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image2.jpg?raw=true)
