@@ -5,7 +5,7 @@ It displays the forecast for the day and also displays news articles which can b
 
 ## Screenshots
 
-![Screens](https://github.com/Computer-Science-GroupWork/NewsReader/blob/9e5a862936433d0e8a1bb47292f3df7d02c3f62f/Shots.png?raw=true)
+![Screens](https://github.com/Computer-Science-GroupWork/NewsReader/blob/a4eb76136107f0567be81ce9cb0b499e50ca9810/Shots.png?raw=true)
 
 ## Features of the app
  
