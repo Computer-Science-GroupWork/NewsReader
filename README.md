@@ -22,6 +22,7 @@ Also search for articles.
 ![Search Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/7390e52f87fc7315b3326af12203f24efeea4ea5/image1.jpg?raw=true)
 
 Share articles with others.
+
 ![Share Screen](https://github.com/Computer-Science-GroupWork/NewsReader/blob/main/whatsapp.jpg?raw=true)
 
 
