@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:text_to_speech/text_to_speech.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
@@ -24,13 +25,16 @@ class _DetailPageState extends State<DetailPage> {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   late bool status=false;
   late  Box box1;
+  late bool speaker = false;
   late String userId;
+  TextToSpeech tts = TextToSpeech();
+
   @override
   initState(){
     getId();
   }
   getId()async{
-    box1 = await Hive.openBox('newsapp');
+    box1 = await Hive.openBox('newsapps');
 
      // box1.clear();
   }
@@ -187,6 +191,27 @@ class _DetailPageState extends State<DetailPage> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  width: 30,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if(speaker == true){
+                      tts.stop();
+                      speaker=false;
+                    }else{
+                      speak();
+                    }
+
+                  },
+                  child: Icon(Icons.campaign_outlined, color: Colors.black),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(13),
+                    primary: Colors.white, // <-- Button color
+                    onPrimary: Colors.red, // <-- Splash color
+                  ),
+                ),
               //   Spacer(),
               //   Status(
               //     icon: Icons.remove_red_eye,
@@ -234,17 +259,24 @@ class _DetailPageState extends State<DetailPage> {
   }
 
    signInAnonymously() async{
-    _auth.signInAnonymously().then((result) {
+    await _auth.signInAnonymously().then((result) {
       setState(() {
-        box1.put('userId', result.user);
+        box1.put('userId', result.user?.uid);
+        userId = box1.get('userId');
 
         // final User user = result.user;
       });
     });
-    userId = box1.get('userId');
-    status=true;
-    print('ussssssssssssssssr ${userId}');
-    addFavorite(widget.datas);
+    if (userId != null){
+      status= true;
+      print('ussssssssssssssssr ${userId}');
+      addFavorite(widget.datas);
+    }else{
+      signInAnonymously();
+      status=false;
+    }
+
+
   }
 
   void addFavorite(datas) async{
@@ -268,6 +300,17 @@ class _DetailPageState extends State<DetailPage> {
     //   showSpinner = false;
     // });
     Fluttertoast.showToast(msg: "Favorite added successfully :) ");
+  }
+
+  Future<void> speak() async {
+     speaker = true;
+    String reader='${getTitle()} ${getSummary()}';
+    print('reader isssssssssssssssssss ${reader}');
+    await tts.setPitch(1.0);
+    await tts.setRate(0.7);
+    await tts.setLanguage('en-US');
+    await tts.speak(reader);
+
   }
 
 }

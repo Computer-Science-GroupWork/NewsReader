@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Colors that we use in our app
-const fPrimaryColor = Color(0xFF7f28c6);
+const fPrimaryColor = Color(0xFF33FFFF);
 const fTextColor = Color(0xFF3C4046);
 const fBackgroundColor = Color(0xFFEBF3F3 );
-const fButtonColor = Color(0xFFa161d5);
+const fButtonColor = Color(0xFF33FFFF);
 
 const double fDefaultPadding = 20.0;
 
-const kGrey1 = Color(0xFF9F9F9F);
-const kGrey2 = Color(0xFF6D6D6D);
+ const kGrey1 = Color(0xFF9F9F9F);
+ const kGrey2 = Color(0xFF6D6D6D);
+
+
 const kGrey3 = Color(0xFFEAEAEA);
 const kBlack = Color(0xFF1C1C1C);
 

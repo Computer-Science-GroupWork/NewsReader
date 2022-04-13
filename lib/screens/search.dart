@@ -8,6 +8,9 @@ import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 import '../widgets/secondary_card.dart';
+import 'favorite.dart';
+import 'home.dart';
+import 'international.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -47,6 +50,26 @@ class _SearchState extends State<Search> {
     } else {
       throw "Unable to retrieve news";
     }
+  }
+  int _selectedIndex = 3; //New
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+      } else if (index == 1) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => International()));
+      } else if (index == 2) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Favorite()));
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Search()));
+      }
+    });
   }
   @override
 
@@ -117,6 +140,49 @@ class _SearchState extends State<Search> {
               ),
             ],),
           backgroundColor: fBackgroundColor,
+          bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(50),
+                    topLeft: Radius.circular(50)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+                ],
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  child: BottomNavigationBar(
+                    backgroundColor: Colors.white,
+                    // currentIndex: _selectedIndex,
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    type: BottomNavigationBarType.fixed,
+
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Local',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.flight),
+                        label: 'International',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.favorite_outline),
+                        label: 'Favorite',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.search),
+                        label: 'Search',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex, //New
+                    onTap: _onItemTapped,
+                  ))),
     body:
 
     Container(

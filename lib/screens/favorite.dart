@@ -5,9 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:newsreader/models/news.dart';
 import 'package:newsreader/screens/detail.dart';
+import 'package:newsreader/screens/search.dart';
 
 import '../constants.dart';
 import '../widgets/secondary_card.dart';
+import 'home.dart';
+import 'international.dart';
 
 class Favorite extends StatefulWidget {
   const Favorite({Key? key}) : super(key: key);
@@ -20,13 +23,14 @@ class _FavoriteState extends State<Favorite> {
   CollectionReference _collectionRef =
       FirebaseFirestore.instance.collection('likes');
   static List? data=[];
+  static List? newdata=[];
   late  Box box1;
   late String userId;
 
   Widget customSearchBar = const Text('Favorites');
 
   getIds()async{
-    box1 = await Hive.openBox('newsapp');
+    box1 = await Hive.openBox('newsapps');
     getFavorites();
   }
 
@@ -41,12 +45,12 @@ getFavorites();
     data = querySnapshot.docs.map((doc) => doc.data()).toList();
     print('daaaaaaaaaaaaaaaaaaa ${data}');
 
-    data
+    newdata=data
         !.where((uid) =>
         uid["likerid"].contains(userId))
         .toList();
     setState(() {
-      data=data;
+      data=newdata;
     });
     // for (int i = 0; i < data!.length; i++) {
     //   NewsModel newsModel = new NewsModel();
@@ -60,7 +64,26 @@ getFavorites();
     //   newsModel.topic = data![i]["topic"];
    // }
   }
+  int _selectedIndex = 2; //New
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+      } else if (index == 1) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => International()));
+      } else if (index == 2) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Favorite()));
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Search()));
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +98,49 @@ getFavorites();
 
         ),
         backgroundColor: fBackgroundColor,
+        bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(50),
+                  topLeft: Radius.circular(50)),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+              ],
+            ),
+            child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+                child: BottomNavigationBar(
+                  backgroundColor: Colors.white,
+                  // currentIndex: _selectedIndex,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  type: BottomNavigationBarType.fixed,
+
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Local',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.flight),
+                      label: 'International',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.favorite_outline),
+                      label: 'Favorite',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search),
+                      label: 'Search',
+                    ),
+                  ],
+                  currentIndex: _selectedIndex, //New
+                  onTap: _onItemTapped,
+                ))),
         body: Container(
             child: data!.isNotEmpty?
             ListView.builder(

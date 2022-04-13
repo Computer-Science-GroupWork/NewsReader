@@ -36,7 +36,7 @@ class _InternationalState extends State<International> {
       Uri.parse(newsURL),
 
       // Send authorization headers to the backend.
-      headers: {'x-api-key': '9OcCDjXqxKPoNc0JRy3BSfEi79fvPiARLuVbSesDYf0'},
+      headers: {'x-api-key': '6nTFas1GHvO0XdXHDC0Ce_E1O69ZpK0Dy5T4-Gesf-w'},
     );
 
     if (response.statusCode == 200) {

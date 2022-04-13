@@ -119,7 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     if (response.statusCode == 200) {
-      weatherT = jsonDecode(response.body)['weather'];
+        weatherT = jsonDecode(response.body)['weather'];
+
       print("WeatherText Data is ${weatherT}");
       return weatherT;
     } else {
@@ -135,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await http.get(
       Uri.parse(newsURL),
       // Send authorization headers to the backend.
-      headers: {'x-api-key': '9OcCDjXqxKPoNc0JRy3BSfEi79fvPiARLuVbSesDYf0'},
+      headers: {'x-api-key': '6nTFas1GHvO0XdXHDC0Ce_E1O69ZpK0Dy5T4-Gesf-w'},
     );
 
     if (response.statusCode == 200) {
@@ -168,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String getWeatherDesc()
   {
+
     return weatherT[0]['main']; 
   }
 
@@ -204,37 +206,121 @@ class _MyHomePageState extends State<MyHomePage> {
         preferredSize: Size.fromHeight(120.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  fit: FlexFit.loose,
-                  flex: 1,
-                  child: ListTile(
-                    title: Text(
-                      "FORECAST",
-                      textAlign: TextAlign.start,
-                      style: kNonActiveTabStyle,
-                    ),
-                      subtitle: Text(
-                      getWeatherDesc(),
-                      textAlign: TextAlign.start,
-                      style: kActiveTabStyle,
-                    ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   mainAxisSize: MainAxisSize.max,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: <Widget>[
+                Container(
+                  child: FutureBuilder(
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved or not
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occured',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                fit: FlexFit.loose,
+                                flex: 1,
+                                child: ListTile(
+                                  title: Text(
+                                    "FORECAST",
+                                    textAlign: TextAlign.start,
+                                    style: kNonActiveTabStyle,
+                                  ),
+                                  subtitle: Text(
+                                    getWeatherDesc(),
+                                    textAlign: TextAlign.start,
+                                    style: kActiveTabStyle,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                fit: FlexFit.loose,
+                                flex: 1,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
+                                ),
+                              ),
+                            ]
+
+
+                          );
+
+                        }
+                      }
+
+                      return Center(
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                          Flexible(
+                          fit: FlexFit.loose,
+                            flex: 1,
+                            child: ListTile(
+                              title: Text(
+                                "FORECAST",
+                                textAlign: TextAlign.start,
+                                style: kNonActiveTabStyle,
+                              ),
+                              subtitle: Text(
+                                getWeatherDesc(),
+                                textAlign: TextAlign.start,
+                                style: kActiveTabStyle,
+                              ),
+                            ),
+                          ),
+                         ]
+                        ),
+                      ));
+                    },
+                    future: getWeatherText(),
                   ),
                 ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
-                  ),
-                ),
-              ]
-            ),
+                // Flexible(
+                //   fit: FlexFit.loose,
+                //   flex: 1,
+                //   child: ListTile(
+                //     title: Text(
+                //       "FORECAST",
+                //       textAlign: TextAlign.start,
+                //       style: kNonActiveTabStyle,
+                //     ),
+                //       subtitle: Text(
+                //       getWeatherDesc(),
+                //       textAlign: TextAlign.start,
+                //       style: kActiveTabStyle,
+                //     ),
+                //   ),
+                // ),
+            //     Flexible(
+            //       fit: FlexFit.loose,
+            //       flex: 1,
+            //       child: Align(
+            //         alignment: Alignment.centerRight,
+            //         child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
+            //       ),
+            //     ),
+            //   ]
+            // ),
             Align(
               alignment: Alignment.topLeft,
               child: TabBar(
