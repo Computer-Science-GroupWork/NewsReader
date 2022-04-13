@@ -36,11 +36,11 @@ class _MyHomePageState extends State<MyHomePage> {
   late Address addresses;
   late String? location;
   late LatLng _center;
-  late Future<List> weatherT;
+  late Future<Map> weatherT;
   late  List news;
   late String weatherURL;
 
-  Future<List> getWeatherText() async {
+  Future<Map> getWeatherText() async {
     currentPosition = await _determinePosition();
     GeoCode geoCode = GeoCode();
     try {
@@ -63,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     if (response.statusCode == 200) {
-      List weatherList = jsonDecode(response.body)['weather'];
-      print("WeatherText Data is ${weatherList}");
+      Map weatherList = jsonDecode(response.body);
+      print("WeatherText Data is ${jsonDecode(response.body)}");
       return weatherList;
     } else {
       print("Response is ${response.statusCode}");
@@ -194,11 +194,12 @@ class _MyHomePageState extends State<MyHomePage> {
             preferredSize: Size.fromHeight(120.0),
             child: Column(
               children: [
-                FutureBuilder<List>(
+                FutureBuilder<Map>(
                   future: weatherT,
                   builder: (ctx, snapshot){
                     if(snapshot.hasData)
                     {
+                      double temp = snapshot.data!['main']['temp'] - 273.0;
                       return Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
@@ -214,8 +215,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                   style: kNonActiveTabStyle,
                                 ),
                                 subtitle: Text(
-                                  snapshot.data![0]['main'],
+                                  snapshot.data!['weather'][0]['main'],
                                   textAlign: TextAlign.start,
+                                  style: kActiveTabStyle,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: ListTile(
+                                title: Text(
+                                  "TEMP",
+                                  textAlign: TextAlign.center,
+                                  style: kNonActiveTabStyle,
+                                ),
+                                subtitle: Text(
+                                  temp.toStringAsFixed(1) + " \u00b0" + "C",
+                                  textAlign: TextAlign.center,
                                   style: kActiveTabStyle,
                                 ),
                               ),
@@ -225,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               flex: 1,
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: new Image.network('http://openweathermap.org/img/w/${snapshot.data![0]['icon']}.png', height: 60,),
+                                child: new Image.network('http://openweathermap.org/img/w/${snapshot.data!['weather'][0]['icon']}.png', height: 60,),
                               ),
                             ),
                           ]
