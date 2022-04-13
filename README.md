@@ -1,4 +1,4 @@
-# newsreader
+# NewsRead
 
 A news and weather app built using Flutter.
 It displays the forecast for the day and also displays news articles which can be read by the app to the user(app reads the text out loud for the user).
