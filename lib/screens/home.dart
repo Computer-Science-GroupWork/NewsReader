@@ -36,20 +36,9 @@ class _MyHomePageState extends State<MyHomePage> {
   late Address addresses;
   late String? location;
   late LatLng _center;
-  late  WeatherModel weather;
-  late List weatherT;
+  late Future<List> weatherT;
   late  List news;
   late String weatherURL;
-  @override
-  void initState() {
-    weatherT = [];
-    weatherT = [{"main" : "Fetching...", "icon": "01n"}];
-    setState(() {});
-  }
-
-
-
-
 
   Future<List> getWeatherText() async {
     currentPosition = await _determinePosition();
@@ -74,15 +63,70 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     if (response.statusCode == 200) {
-        weatherT = jsonDecode(response.body)['weather'];
-
-      print("WeatherText Data is ${weatherT}");
-      return weatherT;
+      List weatherList = jsonDecode(response.body)['weather'];
+      print("WeatherText Data is ${weatherList}");
+      return weatherList;
     } else {
       print("Response is ${response.statusCode}");
       throw "Unable to retrieve weather";
     }
   }
+
+  @override
+  void initState() {
+    setState(() {});
+    weatherT = getWeatherText();
+  }
+
+
+  /* Future<WeatherModel> getWeather() async {
+    currentPosition = await _determinePosition();
+
+    GeoCode geoCode = GeoCode();
+    try {
+      addresses = await geoCode.reverseGeocoding(
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude);
+
+      var first = addresses.city;
+      print("${addresses.city} : ${addresses.countryName}");
+      location = addresses.city;
+    } catch (e) {
+      print(e);
+    }
+    weatherURL =
+        'https://community-open-weather-map.p.rapidapi.com/weather?q=${addresses.city}';
+
+    final response = await http.get(
+      Uri.parse(weatherURL),
+
+      // Send authorization headers to the backend.
+      headers: {
+        'X-RapidAPI-Host': 'community-open-weather-map.p.rapidapi.com',
+        'X-RapidAPI-Key': '73e6c4f710mshf9f5b3ee2ed3f80p1f9b55jsn11b8080f8df8'
+      },
+    );
+    print('datas issssssssssssssssssss ${response.body}');
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body)['main'];
+      ;
+      print('wethar issssssssssssssssssss ${body}');
+
+      weather = WeatherModel.fromJson(body);
+
+      // weather = body.main;
+       print('weathers issssssssssssssssssss ${weather}');
+      await getNews('latest_headlines');
+
+      return weather;
+    } else {
+      throw "Unable to retrieve weather";
+
+    }
+  } */
+
+
 
   Future<List> getNews(String search) async {
     String newsURL =
@@ -90,14 +134,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await http.get(
       Uri.parse(newsURL),
       // Send authorization headers to the backend.
-      headers: {'x-api-key': '6nTFas1GHvO0XdXHDC0Ce_E1O69ZpK0Dy5T4-Gesf-w'},
+      headers: {'x-api-key': 'Rm90XozxCYCQvojFak5SUBFGn6_4AWz3SgH2duuSyvQ'},
     );
 
     if (response.statusCode == 200) {
-        news = jsonDecode(response.body)['articles'];
+      news = jsonDecode(response.body)['articles'];
       return news;
     } else {
-      getNews('latest_headlines');
       throw "Unable to retrieve news";
     }
   }
@@ -122,16 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   int _selectedIndex = 0; //New
 
-  String getWeatherDesc()
-  {
-
-    return weatherT[0]['main']; 
-  }
-
-  String getWeatherIcon()
-  {
-    return weatherT[0]['icon']; 
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -153,273 +186,223 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-     return DefaultTabController(
-        length: 7,
-         child: SafeArea(
-          child: Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120.0),
-        child: Column(
-          children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   mainAxisSize: MainAxisSize.max,
-            //   crossAxisAlignment: CrossAxisAlignment.center,
-            //   children: <Widget>[
-                Container(
-                  child: FutureBuilder(
-                    builder: (ctx, snapshot) {
-                      // Checking if future is resolved or not
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        // If we got an error
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text(
-                              '${snapshot.error} occured',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          );
-
-                          // if we got our data
-                        } else if (snapshot.hasData) {
-                          // Extracting data from snapshot object
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                fit: FlexFit.loose,
-                                flex: 1,
-                                child: ListTile(
-                                  title: Text(
-                                    "FORECAST",
-                                    textAlign: TextAlign.start,
-                                    style: kNonActiveTabStyle,
-                                  ),
-                                  subtitle: Text(
-                                    getWeatherDesc(),
-                                    textAlign: TextAlign.start,
-                                    style: kActiveTabStyle,
-                                  ),
+    return DefaultTabController(
+      length: 7,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(120.0),
+            child: Column(
+              children: [
+                FutureBuilder<List>(
+                  future: weatherT,
+                  builder: (ctx, snapshot){
+                    if(snapshot.hasData)
+                    {
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: ListTile(
+                                title: Text(
+                                  "FORECAST",
+                                  textAlign: TextAlign.start,
+                                  style: kNonActiveTabStyle,
+                                ),
+                                subtitle: Text(
+                                  snapshot.data![0]['main'],
+                                  textAlign: TextAlign.start,
+                                  style: kActiveTabStyle,
                                 ),
                               ),
-                              Flexible(
-                                fit: FlexFit.loose,
-                                flex: 1,
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: new Image.network('http://openweathermap.org/img/w/${getWeatherIcon()}.png', height: 60,),
-                                ),
-                              ),
-                            ]
-
-
-                          );
-
-                        }
-                      }
-
-                      return Center(
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                          Flexible(
-                          fit: FlexFit.loose,
-                            flex: 1,
-                            child: ListTile(
-                              title: Text(
-                                "FORECAST",
-                                textAlign: TextAlign.start,
-                                style: kNonActiveTabStyle,
-                              ),
-                              subtitle: Text(
-                                getWeatherDesc(),
-                                textAlign: TextAlign.start,
-                                style: kActiveTabStyle,
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: new Image.network('http://openweathermap.org/img/w/${snapshot.data![0]['icon']}.png', height: 60,),
                               ),
                             ),
-                          ),
-                         ]
-                        ),
-                      ));
-                    },
-                    future: getWeatherText(),
+                          ]
+                      );
+                    }
+                    return const LinearProgressIndicator();
+                  },
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: TabBar(
+                    labelColor: Colors.black,
+                    unselectedLabelColor: kGrey1,
+                    unselectedLabelStyle: kNonActiveTabStyle,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    isScrollable: true,
+                    indicatorColor: Colors.white,
+                    labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
+                    tabs: [
+                      Tab(text: "Popular"),
+
+                      Tab(text: "Tech"),
+                      Tab(text: "Politics"),
+                      Tab(text: "Sport"),
+
+                      Tab(text: "Business"),
+
+                      Tab(text: "Entertainment"),
+                      Tab(text: "Music"),
+
+
+                    ],
                   ),
                 ),
-
-            Align(
-              alignment: Alignment.topLeft,
-              child: TabBar(
-                labelColor: Colors.black,
-                unselectedLabelColor: kGrey1,
-                unselectedLabelStyle: kNonActiveTabStyle,
-                indicatorSize: TabBarIndicatorSize.label,
-                isScrollable: true,
-                indicatorColor: Colors.white,
-                labelStyle: kActiveTabStyle.copyWith(fontSize: 25.0),
-                tabs: [
-                  Tab(text: "Popular"),
-
-                  Tab(text: "Tech"),
-                  Tab(text: "Politics"),
-                  Tab(text: "Sport"),
-
-                  Tab(text: "Business"),
-
-                  Tab(text: "Entertainment"),
-                  Tab(text: "Music"),
-
-
+              ],
+            ),
+          ),
+          bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(50), topLeft: Radius.circular(50)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black38, spreadRadius: 0, blurRadius: 10),
                 ],
               ),
-            ),
-          ],
+              child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  child: BottomNavigationBar(
+                    // selectedFontSize: 20,
+                    // selectedIconTheme:
+                    // IconThemeData(color: fButtonColor, size: 40),
+                    // selectedItemColor: fButtonColor,
+                    // selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    // backgroundColor: fBackgroundColor,
+                    // unselectedItemColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    // currentIndex: _selectedIndex,
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    type: BottomNavigationBarType.fixed,
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Local',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.flight),
+                        label: 'International',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.favorite_outline),
+                        label: 'Favorites',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.search),
+                        label: 'search',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex, //New
+                    onTap: _onItemTapped,
+                  ))),
+          body:  FutureBuilder(
+            builder: (ctx, snapshot) {
+              // Checking if future is resolved or not
+              if (snapshot.connectionState == ConnectionState.done) {
+                // If we got an error
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${snapshot.error} occured',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+
+                  // if we got our data
+                } else if (snapshot.hasData) {
+                  // Extracting data from snapshot object
+                  return TabBarView(
+                    children: [
+                      PopularTabView(news),
+                      TechTabView(news),
+                      PoliticsTabView(news),
+                      SportsTabView(news),
+                      BusinessTabView(news),
+                      EntertainmentTabView(news),
+                      MusicTabView(news),
+
+                    ],
+                  );
+
+                }
+              }
+
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            future: getNews('latest_headlines'),
+          ),
         ),
       ),
-      bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(50), topLeft: Radius.circular(50)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-            ],
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-              ),
-              child: BottomNavigationBar(
-                // selectedFontSize: 20,
-                // selectedIconTheme:
-                // IconThemeData(color: fButtonColor, size: 40),
-                // selectedItemColor: fButtonColor,
-                // selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                // backgroundColor: fBackgroundColor,
-                // unselectedItemColor: Colors.black,
-                backgroundColor: Colors.white,
-                // currentIndex: _selectedIndex,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                type: BottomNavigationBarType.fixed,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Local',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.flight),
-                    label: 'International',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite_outline),
-                    label: 'Favorites',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'search',
-                  ),
-                ],
-                currentIndex: _selectedIndex, //New
-                onTap: _onItemTapped,
-              ))),
-      body:  FutureBuilder(
-        builder: (ctx, snapshot) {
-          // Checking if future is resolved or not
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If we got an error
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occured',
-                  style: TextStyle(fontSize: 18),
-                ),
-              );
-
-              // if we got our data
-            } else if (snapshot.hasData) {
-              // Extracting data from snapshot object
-              return TabBarView(
-                children: [
-                  PopularTabView(news),
-                  TechTabView(news),
-                  PoliticsTabView(news),
-                  SportsTabView(news),
-                  BusinessTabView(news),
-                  EntertainmentTabView(news),
-                  MusicTabView(news),
-
-                ],
-              );
-
-            }
-          }
-
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        future: getNews('latest_headlines'),
-      ),
-    ),
-         ));
-
+    );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
     return
       Card(
-        elevation: 2.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(getTitle(index)),
-              subtitle: Text(getDescription(index)),
-              // trailing: Icon(Icons.favorite_outline),
-            ),
-            Container(
-              padding: EdgeInsets.only(right: 30, left: 30),
-              height: 100.0,
-              child:
-              Image.network((news[index]['media']) ?? 'https://s3.ap-southeast-1.amazonaws.com/images.asianage.com/images/aa-Cover-fp0p1pcb1uqec36nc6fpphf6o3-20220408013101.jpeg' ),
+          elevation: 2.0,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(getTitle(index)),
+                subtitle: Text(getDescription(index)),
+                // trailing: Icon(Icons.favorite_outline),
+              ),
+              Container(
+                padding: EdgeInsets.only(right: 30, left: 30),
+                height: 100.0,
+                child:
+                Image.network((news[index]['media']) ?? 'https://s3.ap-southeast-1.amazonaws.com/images.asianage.com/images/aa-Cover-fp0p1pcb1uqec36nc6fpphf6o3-20220408013101.jpeg' ),
 
-            ),
-            Container(
-              padding: EdgeInsets.all(5.0),
-              alignment: Alignment.centerLeft,
-              child: Text(getAuthor(index)),
-            ),
-            ButtonBar(
-              children: [
-                TextButton(
-                  child: const Text('LEARN MORE'),
-                  onPressed: () {
-                    NewsModel newsModel= new NewsModel();
-                    newsModel.author=news[index]['author'];
-                    newsModel.title=news[index]['title'];
-                    newsModel.excerpt=news[index]['excerpt'];
-                    newsModel.media=news[index]['media'];
-                    newsModel.summary=news[index]['summary'];
-                    newsModel.topic=news[index]['topic'];
-                    newsModel.published_date=news[index]['published_date'];
-                    newsModel.link=news[index]['link'];
-                    // newsModel.title=news[index]['title'];
-                    // newsModel.title=news[index]['title'];
+              ),
+              Container(
+                padding: EdgeInsets.all(5.0),
+                alignment: Alignment.centerLeft,
+                child: Text(getAuthor(index)),
+              ),
+              ButtonBar(
+                children: [
+                  TextButton(
+                    child: const Text('LEARN MORE'),
+                    onPressed: () {
+                      NewsModel newsModel= new NewsModel();
+                      newsModel.author=news[index]['author'];
+                      newsModel.title=news[index]['title'];
+                      newsModel.excerpt=news[index]['excerpt'];
+                      newsModel.media=news[index]['media'];
+                      newsModel.summary=news[index]['summary'];
+                      newsModel.topic=news[index]['topic'];
+                      newsModel.published_date=news[index]['published_date'];
+                      newsModel.link=news[index]['link'];
+                      // newsModel.title=news[index]['title'];
+                      // newsModel.title=news[index]['title'];
 
-                    // Map<String, dynamic> as = newsModel.toMap();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => DetailPage(datas: newsModel)));
-                  },
-                )
-              ],
-            )
-          ],
-        ));
+                      // Map<String, dynamic> as = newsModel.toMap();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DetailPage(datas: newsModel)));
+                    },
+                  )
+                ],
+              )
+            ],
+          ));
   }
 
   Future<Position> _determinePosition() async {
@@ -460,5 +443,7 @@ class _MyHomePageState extends State<MyHomePage> {
         desiredAccuracy: LocationAccuracy.high);
   }
 
+  getSearch(String value) {
 
+  }
 }
